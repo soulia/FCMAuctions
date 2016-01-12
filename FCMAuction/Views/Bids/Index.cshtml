@@ -1,0 +1,15 @@
+﻿@model FCMAuction.Models.Item
+
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Bids for @Model.Name</h2>
+
+@Html.Partial("_Bids", Model.Bids)
+
+<p>
+    @*@Html.ActionLink("Create New", "Create", new { itemId = Model.Id })*@
+</p>
+
