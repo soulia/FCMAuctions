@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40629.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FCMAuction", "FCMAuction\FCMAuction.csproj", "{3406AE44-8476-426C-9C25-F23BC49A15A6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FCMAuction.Tests", "FCMAuction.Tests\FCMAuction.Tests.csproj", "{EDE3B99E-AD83-4976-AD12-4B7A7B550AB7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3406AE44-8476-426C-9C25-F23BC49A15A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3406AE44-8476-426C-9C25-F23BC49A15A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3406AE44-8476-426C-9C25-F23BC49A15A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3406AE44-8476-426C-9C25-F23BC49A15A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EDE3B99E-AD83-4976-AD12-4B7A7B550AB7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDE3B99E-AD83-4976-AD12-4B7A7B550AB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDE3B99E-AD83-4976-AD12-4B7A7B550AB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDE3B99E-AD83-4976-AD12-4B7A7B550AB7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
