@@ -28,19 +28,19 @@ namespace FCMAuction.Migrations
         // then PM> Update-Database -Verbose
         protected override void Seed(FCMAuction.Models.FCMAuctionDb context)
         {
-            context.Items.AddOrUpdate(
-                r => r.Name,
-                new Item
-                {
-                    Name = "Fist Item",
-                    Description = "First Description...",
-                    Image = "1.jpg",
-                    Value = 42,
-                    MinimumBid = 43,
-                    Bids = new List<ItemBid> { 
-                        new ItemBid { Bid = 44, ItemId = 1, UserId = 1}
-                     }
-                });
+            //context.Items.AddOrUpdate(
+            //    r => r.Name,
+            //    new Item
+            //    {
+            //        Name = "Fist Item",
+            //        Description = "First Description...",
+            //        Image = "1.jpg",
+            //        Value = 42,
+            //        MinimumBid = 43,
+            //        Bids = new List<ItemBid> { 
+            //            new ItemBid { Bid = 44, ItemId = 1, UserId = 1}
+            //         }
+            //    });
 
 
             SeedMembership();
