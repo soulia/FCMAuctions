@@ -12,6 +12,23 @@ namespace FCMAuction.Controllers
     public class BidsController : Controller
     {
         FCMAuctionDb _db = new FCMAuctionDb();
+
+        //public ActionResult BidHistory(int id)
+        //{
+        //    int userId = (int)Membership.GetUser().ProviderUserKey;
+
+        //    var myBids = from  b in _db.ItemBids
+        //                 join u in _db.UserProfiles
+        //                 on b.UserId equals u.UserId
+        //                  where b.Id == id
+        //                  orderby b.Bid descending
+        //                  select b;
+        //    if (myBids.Any())
+        //        return View(myBids);
+        //    else
+        //        return View();
+        //}
+
         //
         // GET: /Bids/
 
@@ -70,6 +87,8 @@ namespace FCMAuction.Controllers
             // for this to work, make sure to set     @Html.ValidationSummary(false) in the Create.cshtml View
             if (bidd.Bid <= minumBid)
                 ModelState.AddModelError("Bid", "Bid must be greater than $" + minumBid.ToString());
+            else
+                bidd.UserId = (int)Membership.GetUser().ProviderUserKey; 
 
             if(ModelState.IsValid)
             {

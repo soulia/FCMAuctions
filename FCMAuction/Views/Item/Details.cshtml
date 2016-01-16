@@ -13,7 +13,7 @@
         @{
             string imagePath = string.Format("~/Content/images/{0}", @Html.Raw(Html.DisplayFor(model => model.Image)));
         }
-        <img src="@Url.Content(imagePath)" alt="Image" style="width: 400px; height: 400px;" />
+        <img src="@Url.Content(imagePath)" alt="Image" style="width: 400px;" />
     </div>
 
     <div class="display-label" style="font-weight : bold">

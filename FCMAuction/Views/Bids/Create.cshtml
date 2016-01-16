@@ -14,6 +14,9 @@
         <legend>New Bid</legend>
 
         <div class="editor-label" style="width : 250px">
+            @*<div>
+                <b>Your previous bids were: </b>@Html.Action("BidHistory", "Bids", new { id = @Model.Id })
+            </div>*@
             <br/><b>Please bid higher than:       
             @Html.EditorFor(model => model.Bid, "{0:c}")</b>
             @Html.ValidationMessageFor(model => model.Bid)

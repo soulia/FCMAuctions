@@ -272,6 +272,8 @@
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <None Include="Properties\PublishProfiles\fcm2 - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\fcm2 - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\FCMAuction - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\FCMAuction - Web Deploy %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\FCMAuction - Web Deploy.pubxml" />
