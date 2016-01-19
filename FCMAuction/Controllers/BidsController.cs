@@ -13,21 +13,22 @@ namespace FCMAuction.Controllers
     {
         FCMAuctionDb _db = new FCMAuctionDb();
 
-        //public ActionResult BidHistory(int id)
-        //{
-        //    int userId = (int)Membership.GetUser().ProviderUserKey;
+        public ActionResult BidHistory(int itemId)
+        {
+            int userId = (int)Membership.GetUser().ProviderUserKey;
 
-        //    var myBids = from  b in _db.ItemBids
-        //                 join u in _db.UserProfiles
-        //                 on b.UserId equals u.UserId
-        //                  where b.Id == id
-        //                  orderby b.Bid descending
-        //                  select b;
-        //    if (myBids.Any())
-        //        return View(myBids);
-        //    else
-        //        return View();
-        //}
+            var myBids = from b in _db.ItemBids
+                         join u in _db.UserProfiles
+                         on b.UserId equals u.UserId
+                         where b.ItemId == itemId
+                         orderby b.Bid descending
+                         select b.Bid;
+
+            if (myBids.Any())
+                return Content("$" + string.Join(", $",  myBids));
+            else
+                return Content("None");
+        }
 
         //
         // GET: /Bids/
@@ -61,6 +62,7 @@ namespace FCMAuction.Controllers
             object userId = Membership.GetUser().ProviderUserKey;
             var myBid = new ItemBid();
             myBid.Bid = highestBid + 1;
+            myBid.ItemId = itemId;
             myBid.UserId = (int)userId;
 
             return View(myBid);

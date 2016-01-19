@@ -6,24 +6,27 @@
 
 <h2>Your Bid for this item is:</h2>
 
-@using (Html.BeginForm()) {
+@using (Html.BeginForm())
+{
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)
 
     <fieldset>
         <legend>New Bid</legend>
 
-        <div class="editor-label" style="width : 250px">
-            @*<div>
-                <b>Your previous bids were: </b>@Html.Action("BidHistory", "Bids", new { id = @Model.Id })
-            </div>*@
-            <br/><b>Please bid higher than:       
-            @Html.EditorFor(model => model.Bid, "{0:c}")</b>
+        <div class="editor-label" style="width : 350px">
+            <div>
+                <b>Your previous bids were: </b>@Html.Action("BidHistory", "Bids", new { id = @Model.ItemId })
+            </div>
+            <br /><b>
+                Please bid higher than:
+            </b>
+                @Html.EditorFor(model => model.Bid, "{0:c}")
             @Html.ValidationMessageFor(model => model.Bid)
         </div>
 
         <p>
-            <input type="submit" value="Submit My Bid"  />
+            <input type="submit" value="Submit My Bid" />
         </p>
     </fieldset>
 }
@@ -33,5 +36,5 @@
 </div>
 
 @section Scripts {
-    
+
 }
