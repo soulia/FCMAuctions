@@ -21,6 +21,7 @@ namespace FCMAuction.Controllers
                          join u in _db.UserProfiles
                          on b.UserId equals u.UserId
                          where b.ItemId == itemId
+                         where b.UserId == userId
                          orderby b.Bid descending
                          select b.Bid;
 
