@@ -13,9 +13,32 @@ namespace FCMAuction.Controllers
     {
         FCMAuctionDb _db = new FCMAuctionDb();
 
+        public class bidTest
+        {
+            public int Id { get; set; }
+            public int Bid { get; set; }
+            public int ItemId { get; set; }
+            public int UserId { get; set; }
+        }
+
         public ActionResult BidHistory(int itemId)
         {
             int userId = (int)Membership.GetUser().ProviderUserKey;
+
+            // test section
+            //var data  = _db.Database.SqlQuery<bidTest>("Winners", DBNull.Value);
+
+            //var allBids = from b in _db.ItemBids
+            //            // join u in _db.UserProfiles
+            //             //on b.UserId equals u.UserId
+            //             //where b.ItemId == itemId
+            //             //where b.UserId == userId
+            //             orderby b.Bid descending
+            //             select b.Bid;
+
+            //foreach ( bid in )
+
+            // end test section
 
             var myBids = from b in _db.ItemBids
                          join u in _db.UserProfiles

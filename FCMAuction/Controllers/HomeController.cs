@@ -18,7 +18,8 @@ namespace FCMAuction.Controllers
             //            orderby i.Name
             //            select i;
             var model = _db.Items
-                .OrderByDescending(r => r.Bids.Max(bid => bid.Bid))
+                //.OrderByDescending(r => r.Bids.Max(bid => bid.Bid))
+                .OrderBy(r => r.Name)
                 .Select(r => new ItemListViewModel
                 {
                     Id = r.Id,
