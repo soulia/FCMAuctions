@@ -13,10 +13,17 @@ namespace FCMAuction.Controllers
 
         public ActionResult Index()
         {
-            //var model = _db.Items.ToList();
-            //var model = from i in _db.Items
-            //            orderby i.Name
-            //            select i;
+            var maxBids =
+                from b in _db.ItemBids
+                group b by b.ItemId into g
+                select new { ItemId = g.Key, Bid = g.Max(b => b.Bid) };
+
+            int bidsTotal =
+                (from b in maxBids
+                 select b.Bid).Sum();
+
+            ViewBag.BidTotal = string.Format("Auction Bid Total: {0:c0}", bidsTotal);
+
             var model = _db.Items
                 //.OrderByDescending(r => r.Bids.Max(bid => bid.Bid))
                 .OrderBy(r => r.Name)
@@ -33,26 +40,8 @@ namespace FCMAuction.Controllers
                     HighestBid = (int?)r.Bids.Max(b => b.Bid) ?? 0 
                 });
                 
-
             return View(model);
         }
-
-        // new { id = item.Id, bid = item.NewBid }) |
-        //public ActionResult BidMe(int id, int bid)
-        //{
-        //    var newBid = new ItemBid();
-        //    newBid.ItemId = id;
-        //    newBid.Bid = bid + 2;
-
-        //    if (ModelState.IsValid)
-        //    {
-        //        _db.ItemBids.Add(newBid);
-        //        _db.SaveChanges();
-        //        //return RedirectToAction("Index");
-        //    }
-
-        //    return RedirectToAction("Index");
-        //}
 
         public ActionResult About()
         {
