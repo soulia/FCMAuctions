@@ -12,6 +12,7 @@ namespace FCMAuctions.Library
     {
         /// <summary>
         /// PS - Practical LINQ / LINQ By Example / Extenstion Methods
+        /// http://msmvps.com/blogs/deborahk/
         /// Converts a list of strings to title case
         /// </summary>
         public static string ConvertToTitleCase(this string source)

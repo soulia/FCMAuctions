@@ -22,5 +22,6 @@ namespace FCMAuction.Models
         [Display(Name = "Highest")]
         [DisplayFormat(DataFormatString = "{0:c}")]
         public int HighestBid { get; set; }
+        public int? UserId { get; set; }
     }
 }

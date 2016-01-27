@@ -14,33 +14,56 @@ namespace FCMAuction.Controllers
         public ActionResult Index()
         {
             var maxBids =
-                from b in _db.ItemBids
-                group b by b.ItemId into g
-                select new { ItemId = g.Key, Bid = g.Max(b => b.Bid) };
+                            from b in _db.ItemBids
+                            group b by b.ItemId into g
+                            select new { ItemId = g.Key, Bid = g.Max(b => b.Bid) };
 
             int bidsTotal =
-                (from b in maxBids
-                 select b.Bid).Sum();
+                            (from b in maxBids
+                             select b.Bid).Sum();
+            int bidsCount =
+                            (from b in _db.ItemBids
+                                select b.Bid).Count();
 
-            ViewBag.BidTotal = string.Format("Auction Bid Total: {0:c0}", bidsTotal);
+            ViewBag.BidTotal = string.Format("There are {0} bids and a total of {1:c0} in winning bids.", bidsCount, bidsTotal);
 
-            var model = _db.Items
-                //.OrderByDescending(r => r.Bids.Max(bid => bid.Bid))
-                .OrderBy(r => r.Name)
-                .Select(r => new ItemListViewModel
-                {
-                    Id = r.Id,
-                    Name = r.Name,
-                    Description = r.Description,
-                    Image = r.Image,
-                    Value = r.Value,
-                    MinimumBid = r.MinimumBid,
-                    NewBid = r.MinimumBid,
-                    // http://stackoverflow.com/questions/6864311/the-cast-to-value-type-int32-failed-because-the-materialized-value-is-null
-                    HighestBid = (int?)r.Bids.Max(b => b.Bid) ?? 0 
-                });
-                
-            return View(model);
+            //var model = _db.Items
+            //    //.OrderByDescending(r => r.Bids.Max(bid => bid.Bid))
+            //    .OrderBy(r => r.Name)
+            //    .Select(r => new ItemListViewModel
+            //    {
+            //        Id = r.Id,
+            //        Name = r.Name,
+            //        Description = r.Description,
+            //        Image = r.Image,
+            //        Value = r.Value,
+            //        MinimumBid = r.MinimumBid,
+            //        NewBid = r.MinimumBid,
+            //        // http://stackoverflow.com/questions/6864311/the-cast-to-value-type-int32-failed-because-the-materialized-value-is-null
+            //        HighestBid = (int?)r.Bids.Max(b => b.Bid) ?? 0 
+            //    });
+            var itemBids = _db.Items.GroupJoin(_db.ItemBids,
+                    i => i.Id,
+                    ib => ib.ItemId,
+                    (x, y) => new { Items = x, ItemBids = y })
+                    .SelectMany(
+                        x => x.ItemBids.DefaultIfEmpty(),
+                        (x, y) => new { Items = x.Items, ItemBids = y });
+
+            var model = itemBids.Select(i => new ItemListViewModel
+            {
+                Id = i.Items.Id,
+                Name = i.Items.Name,
+                Description = i.Items.Description,
+                Image = i.Items.Image,
+                Value = i.Items.Value,
+                MinimumBid = i.Items.MinimumBid,
+                NewBid = (int?)i.ItemBids.Bid ?? 0,
+                HighestBid = (int?)i.Items.Bids.Max(b => b.Bid) ?? 0,
+                UserId = (int?)i.ItemBids.UserId
+            }).OrderBy(i => i.Name).ThenByDescending(i => i.NewBid);
+
+            return View(model.GroupBy(i => i.Id).Select(x => x.FirstOrDefault()).OrderBy(i => i.Name));
         }
 
         public ActionResult About()
