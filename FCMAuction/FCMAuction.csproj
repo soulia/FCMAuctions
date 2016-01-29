@@ -340,6 +340,7 @@
     <Content Include="Views\Item\Create.cshtml" />
     <Content Include="Views\Item\Edit.cshtml" />
     <Content Include="Views\Item\Delete.cshtml" />
+    <Content Include="Views\Home\MyBids.cshtml" />
     <None Include="Views\Item\Bid.cshtml.bak" />
     <Content Include="Views\Bids\Index.cshtml" />
     <Content Include="Views\Bids\_Bids.cshtml" />

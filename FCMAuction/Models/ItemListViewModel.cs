@@ -17,6 +17,7 @@ namespace FCMAuction.Models
         [Display(Name = "Minimum")]
         [DisplayFormat(DataFormatString = "{0:c}")]
         public int MinimumBid { get; set; }
+        [Display(Name = "My Bid")]
         [DisplayFormat(DataFormatString = "{0:c}")]
         public int NewBid { get; set; }
         [Display(Name = "Highest")]

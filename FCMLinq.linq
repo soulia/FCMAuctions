@@ -86,9 +86,10 @@ Console.WriteLine("Bid Count = {0}", bidCount);
 Console.WriteLine(maxBids);
 ////////////////////////////////////////
 
-//=============================================
+//==========================================================================
 // Home / Index
 
+	// This is the original model query
   //var model = Items
   var itemBids = Items
       //.OrderByDescending(r => r.Bids.Max(bid => bid.Bid))
@@ -108,9 +109,49 @@ Console.WriteLine(maxBids);
 	  
 Console.WriteLine(itemBids);
 
-var winningBids = itemBids.GroupBy(i => i.ItemId).Select(g => new {g.Key, Bid = g.Max(b => b.Bid)});
+// broken - 
+//var winningBids = itemBids.GroupBy(i => i.Id).Select(g => new {g.Key, Bid = g.Max(b => b.Bid)});
+//Console.WriteLine(winningBids);
 
-Console.WriteLine(winningBids);
+// Here's the new query 1/27/2016
+// now with left join...
+// http://stackoverflow.com/questions/584820/how-do-you-perform-a-left-outer-join-using-linq-extension-methods
+var itemBids = Items.GroupJoin(ItemBids, 
+						i => i.Id, 
+						ib => ib.ItemId,
+						(x,y) => new 
+							{ Items = x, ItemBids = y })
+						.SelectMany(
+							x => x.ItemBids.DefaultIfEmpty(),
+							(x, y) => new {Items = x.Items, ItemBids = y});
+							
+//Console.WriteLine(itemBids);  // 397 ItemBids 
+
+// baseline...
+//var model = itemBids.Select(i => new { i.Items.Id, i.Items.Name, i.ItemBids});
+//Console.WriteLine(model);
+
+// http://stackoverflow.com/questions/23188855/i-get-anonymous-type-members-must-be-declared-with-a-member-assignment-when-cast
+var model = itemBids.Select(i => new 
+		{ 	Id = i.Items.Id, 
+			Name = i.Items.Name,
+			Description = i.Items.Description,
+			Image = i.Items.Image,
+			Value = i.Items.Value,
+			MinimumBid = i.Items.MinimumBid,
+			//NewBid = (int?)i.ItemBids.Bid ?? 0,  // ItemListViewModel
+            MyBid = (int?)i.ItemBids.Bid ?? 0,
+			//HighestBid = (int?)i.Items.Bids.Max(b => b.Bid) ?? 0,  // ItemListViewModel
+			HighestBid = (int?)i.Items.ItemBids.Max(b => b.Bid) ?? 0,
+			UserId = (int?)i.ItemBids.UserId
+		//}).GroupBy(i => i.Name); //.OrderByDescending(i => i.MyBid);
+		}).OrderBy(i => i.Name).ThenByDescending(i => i.MyBid); //.Where(u => u.UserId == 3);
+
+//Console.WriteLine(model.Where(u => u.UserId == 3).GroupBy(i => i.Id).Select(x => x.FirstOrDefault()));
+Console.WriteLine(model.GroupBy(i => i.Id).Select(x => x.FirstOrDefault()).OrderBy(i => i.Name).ThenBy(i => i.Description));
+
+//==========================================================================
+//==========================================================================
 
 //=============================================
 /// PS - Practical LINQ / More LINQ Examples
@@ -149,9 +190,10 @@ var itemBids = Items.Join(ItemBids, i => i.Id,
 								//UserName = (UserProfiles.Select(u => u.UserName).Where(u => u.UserId == ib.UserId))
 								//UserName = (UserProfiles.Select(new {Name = u.UserName, Id = u.UserId}).Where(x => x.Id == UserId))
 							});
-Console.WriteLine(itemBids);  // 379 - 288 = 91 
+Console.WriteLine(itemBids);  // 385 - 288 = 91 
 
 // now with left join...
+// Show all Items and ItemBids
 // http://stackoverflow.com/questions/584820/how-do-you-perform-a-left-outer-join-using-linq-extension-methods
 var itemBids = Items.GroupJoin(ItemBids, 
 						i => i.Id, 
@@ -162,13 +204,14 @@ var itemBids = Items.GroupJoin(ItemBids,
 							x => x.ItemBids.DefaultIfEmpty(),
 							(x, y) => new {Items = x.Items, ItemBids = y});
 							
-//Console.WriteLine(itemBids);  // 379 - 288 = 91 
+//Console.WriteLine(itemBids);  // 397 ItemBids 
 
 // baseline...
 //var model = itemBids.Select(i => new { i.Items.Id, i.Items.Name, i.ItemBids});
 //Console.WriteLine(model);
 
 // http://stackoverflow.com/questions/23188855/i-get-anonymous-type-members-must-be-declared-with-a-member-assignment-when-cast
+// Show all Items with HighestBid (winning bid)
 var model = itemBids.Select(i => new 
 		{ 	Id = i.Items.Id, 
 			Name = i.Items.Name,
@@ -180,11 +223,42 @@ var model = itemBids.Select(i => new
 			HighestBid = (int?)i.Items.ItemBids.Max(b => b.Bid) ?? 0,
 			UserId = (int?)i.ItemBids.UserId
 		//}).GroupBy(i => i.Name); //.OrderByDescending(i => i.MyBid);
-		}).OrderBy(i => i.Name).ThenByDescending(i => i.MyBid); //.Where(u => u.UserId == 3);
+		}).OrderBy(i => i.Name); //.ThenByDescending(i => i.MyBid); //.Where(u => u.UserId == 3);
 
-Console.WriteLine(model.Where(u => u.UserId == 3).GroupBy(i => i.Id).Select(x => x.FirstOrDefault()));
-Console.WriteLine(model.GroupBy(i => i.Id).Select(x => x.FirstOrDefault()));
+//Console.WriteLine(model.Where(u => u.UserId == 3).GroupBy(i => i.Id).Select(x => x.FirstOrDefault()));
+Console.WriteLine(model.GroupBy(i => i.Id).Select(x => x.FirstOrDefault()).OrderBy(i => i.Name).ThenBy(i => i.Description));
+//Console.WriteLine(model.GroupBy(i => i.Id).Select(x => x.FirstOrDefault()));
 
+var left = model.GroupBy(i => i.Id).Select(x => x.FirstOrDefault());
+Console.WriteLine(left);
+
+var q1 = UserProfiles.Join(model, u => u.UserId,
+							m => m.UserId,
+							(u, m) => new
+								{
+									UserName = u.UserName,
+									UserId = u.UserId,
+									ItemName = m.Name,
+									ItemId = m.Id,
+									Bid = m.MyBid
+								});
+//Console.WriteLine(q1.OrderBy(i => i.ItemName).Where(u => u.UserId == 3)); 
+Console.WriteLine(q1.OrderBy(i => i.ItemName)); 
+
+
+
+
+var q1 = UserProfiles.Join(itemBids, u => u.UserId,
+							ib => ib.UserId,
+							(u, ib) => new
+								{
+									UserName = u.UserName,
+									UserId = u.UserId,
+									ItemName = ib.Name,
+									ItemId = ib.Id,
+									Bid = ib.Bid
+								});
+Console.WriteLine(q1.OrderBy(i => i.ItemName)); 
 
 //var winningBids = itemBids.GroupBy(i => new {i.ItemId, i.ItemName}).Select(g => new {g.Key.ItemId, g.Key.ItemName, Bid = g.Max(b => b.Bid)});
 var winningBids = ItemBids.GroupBy(i => i.Id).Select(g => new {g.Key, Bid = (int?)g.Max(b => b.Bid) ?? 0});
@@ -205,17 +279,7 @@ var itemBidsWithWinningBids = itemBids.Join(winningBids, ib => ib.Id,
 									}); //.Where(u => u.UserId == 3);
 Console.WriteLine(itemBidsWithWinningBids.OrderBy(i => i.Name));
 								
-var q1 = UserProfiles.Join(itemBids, u => u.UserId,
-							ib => ib.UserId,
-							(u, ib) => new
-								{
-									UserName = u.UserName,
-									UserId = u.UserId,
-									ItemName = ib.Name,
-									ItemId = ib.Id,
-									Bid = ib.Bid
-								});
-Console.WriteLine(q1.OrderBy(i => i.ItemName));  // 288
+ // 288
 							
 //Console.WriteLine(q1.Where(u => u.UserId == 3));
 //Console.WriteLine(q1.Where(u => u.UserId == 3).GroupBy(i => i.ItemId));

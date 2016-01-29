@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 
 namespace FCMAuction.Controllers
 {
@@ -23,7 +24,7 @@ namespace FCMAuction.Controllers
                              select b.Bid).Sum();
             int bidsCount =
                             (from b in _db.ItemBids
-                                select b.Bid).Count();
+                             select b.Bid).Count();
 
             ViewBag.BidTotal = string.Format("There are {0} bids and a total of {1:c0} in winning bids.", bidsCount, bidsTotal);
 
@@ -63,7 +64,37 @@ namespace FCMAuction.Controllers
                 UserId = (int?)i.ItemBids.UserId
             }).OrderBy(i => i.Name).ThenByDescending(i => i.NewBid);
 
-            return View(model.GroupBy(i => i.Id).Select(x => x.FirstOrDefault()).OrderBy(i => i.Name));
+            return View(model.GroupBy(i => i.Id).Select(x => x.FirstOrDefault()).OrderBy(i => i.Name).ThenBy(i => i.Description));
+        }
+
+        [Authorize]
+        public ActionResult MyBids()
+        {
+            int userId = (int)Membership.GetUser().ProviderUserKey;
+
+            var itemBids = _db.Items.GroupJoin(_db.ItemBids,
+                                                    i => i.Id,
+                                                    ib => ib.ItemId,
+                                                    (x, y) => new { Items = x, ItemBids = y })
+                                                    .SelectMany(
+                                                        x => x.ItemBids.DefaultIfEmpty(),
+                                                        (x, y) => new { Items = x.Items, ItemBids = y });
+
+            var model = itemBids.Select(i => new ItemListViewModel
+            {
+                Id = i.Items.Id,
+                Name = i.Items.Name,
+                Description = i.Items.Description,
+                Image = i.Items.Image,
+                Value = i.Items.Value,
+                MinimumBid = i.Items.MinimumBid,
+                NewBid = (int?)i.ItemBids.Bid ?? 0,
+                HighestBid = (int?)i.Items.Bids.Max(b => b.Bid) ?? 0,
+                UserId = (int?)i.ItemBids.UserId
+            }).OrderBy(i => i.Name).ThenByDescending(i => i.NewBid);
+
+            // http://stackoverflow.com/questions/14747680/distinct-by-one-column-and-max-from-another-column-linq
+            return View(model.Where(u => u.UserId == userId).GroupBy(i => i.Id).Select(g => g.OrderByDescending(x => x.NewBid).FirstOrDefault()));
         }
 
         public ActionResult About()
