@@ -4,20 +4,17 @@
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+<h2>@Html.DisplayFor(model => model.Name)</h2>
+<br/>
 
 <fieldset>
     <legend>Item</legend>
 
-    <div style="float : left; padding-right : 10px">
+    <div style="float : left; padding-right : 10px; padding-bottom : 20px;">
         @{
             string imagePath = string.Format("~/Content/images/{0}", @Html.Raw(Html.DisplayFor(model => model.Image)));
         }
         <img src="@Url.Content(imagePath)" alt="Image" style="width: 400px;" />
-    </div>
-
-    <div class="display-label" style="font-weight : bold">
-        @Html.DisplayFor(model => model.Name) <br /><br/>
     </div>
 
     <div class="display-label" style="font-weight : bold">
@@ -28,25 +25,13 @@
     </div>
 
     <div class="display-label" style="font-weight : bold">
-         @Html.DisplayNameFor(model => model.Image) 
-    </div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.Image)
+        @Html.DisplayNameFor(model => model.Value) : @Html.DisplayFor(model => model.Value)
     </div>
 
     <div class="display-label" style="font-weight : bold">
-        @Html.DisplayNameFor(model => model.Value)
-    </div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.Value)
+        Minimum Bid : @Html.DisplayFor(model => model.MinimumBid)
     </div>
 
-    <div class="display-label" style="font-weight : bold">
-        Minimum Bid
-    </div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.MinimumBid)
-    </div>
 </fieldset>
 <p>
     @*@Html.ActionLink("Edit", "Edit", new { id=Model.Id }) |*@

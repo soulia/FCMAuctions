@@ -759,3 +759,38 @@ tr.pager td {
     width: 400px;
     height: 170px;
 }
+
+/* flex */
+.child-column {
+    flex-flow: column;
+    text-align: center;
+}
+.child-row {
+    flex-flow:row;
+}
+
+.child-column ul {
+    list-style-type:none;
+    display:flex;
+    flex-flow: row ;
+    width:800px;
+    margin:0;padding-left:100px;
+}
+
+.child-column ul li{
+    flex-grow:1;
+    text-align:left;
+    width:400px;
+}
+
+hr {
+    width: auto;
+    margin: 25px 20px;
+}
+
+
+@media print {
+    header {
+        display:none;
+    }
+}

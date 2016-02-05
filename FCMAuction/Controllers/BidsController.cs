@@ -60,10 +60,87 @@ namespace FCMAuction.Controllers
         [Authorize(Roles="admin")]
         public ActionResult Index([Bind(Prefix = "id")] int itemId)
         {
-            var item = _db.Items.Find(itemId);
+            //var item = _db.Items.Find(itemId);
 
-            if(item != null)
-                return View(item);
+            var allItemsBidHistory = _db.Items.GroupJoin(_db.ItemBids,
+                        i => i.Id,
+                        ib => ib.ItemId,
+                        (x, y) => new { Items = x, ItemBids = y })
+                        .SelectMany(
+                            x => x.ItemBids.DefaultIfEmpty(),
+                            (x, y) => new { Items = x.Items, ItemBids = y })
+                            .Where(i => i.Items.Id == itemId);
+
+            var model = allItemsBidHistory.Select(i => new
+            {
+                Id = i.Items.Id,
+                Name = i.Items.Name,
+                Description = i.Items.Description,
+                Image = i.Items.Image,
+                Value = i.Items.Value,
+                MinimumBid = i.Items.MinimumBid,
+                NewBid = (int?)i.ItemBids.Bid ?? 0,  // ItemListViewModel
+                //MyBid = (int?)i.ItemBids.Bid ?? 0,
+                HighestBid = (int?)i.Items.Bids.Max(b => b.Bid) ?? 0,  // ItemListViewModel
+                //HighestBid = (int?)i.Items.ItemBids.Max(b => b.Bid) ?? 0,
+                UserId = (int?)i.ItemBids.UserId
+                //}).OrderByDescending(i => i.MyBid);
+                //}).GroupBy(i => i.Name); //.OrderByDescending(i => i.MyBid);
+            }).OrderBy(i => i.Id).ThenByDescending(i => i.NewBid);
+
+            var bidsByUser = _db.UserProfiles.Join(model, u => u.UserId,
+                            m => m.UserId,
+                            (u, m) => new
+                            {
+                                UserName = u.UserName,
+                                UserId = u.UserId,
+                                ItemName = m.Name,
+                                Description = m.Description,
+                                Image = m.Image,
+                                Value = m.Value,
+                                MinBid = m.MinimumBid,
+                                ItemId = m.Id,
+                                Bid = m.NewBid
+                            });
+
+            if (bidsByUser.Count() > 0)
+            {
+
+                //var result = bidsByUser.OrderBy(i => i.ItemName).ThenBy(i => i.Description).ThenByDescending(i => i.Bid);
+                var result = bidsByUser.Select(b => new BidListViewModel
+                    {
+                        UserId = b.UserId,
+                        UserName = b.UserName,
+                        ItemId = b.ItemId,
+                        ItemName = b.ItemName,
+                        Description = b.Description,
+                        Image = b.Image,
+                        Value = b.Value,
+                        MinimumBid = b.MinBid,
+                        Bid = b.Bid
+                    }).OrderBy(b => b.ItemName).ThenBy(b => b.Description).ThenByDescending(b => b.Bid);
+
+                if (result != null)
+                    return View(result);
+            }
+            else
+            {
+                var result = model.Select(r => new BidListViewModel
+                    {
+                        UserId = null,
+                        UserName = null,
+                        ItemId = r.Id,
+                        ItemName = r.Name,
+                        Description = r.Description,
+                        Image = r.Image,
+                        Value = r.Value,
+                        MinimumBid = r.MinimumBid,
+                        Bid = null
+                    });
+
+                if (result != null)
+                    return View(result);
+            }
             return HttpNotFound();
         }
 

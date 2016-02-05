@@ -1,15 +1,40 @@
-﻿@model FCMAuction.Models.Item
-
+﻿@model IEnumerable<BidListViewModel>
 
 @{
     ViewBag.Title = "Index";
 }
 
-<h2>Bids for @Model.Name</h2>
+<div class="child-column">
+    <h1>@Html.DisplayFor(modelItem => Model.FirstOrDefault().ItemName)</h1>
+    <h2>Value: @Html.DisplayFor(modelItem => Model.FirstOrDefault().Value)</h2>
+    <h3>
+        @Html.DisplayFor(modelItem => Model.FirstOrDefault().Description)
+    </h3>
+    <hr/>
+</div>
 
-@Html.Partial("_Bids", Model.Bids)
+<div class="child-column">
+    <ul class="child-row">
+        <li><b>@Html.DisplayNameFor(model => model.UserName)</b></li>
+        <li><b>Phone</b></li>
+        <li><b>@Html.DisplayNameFor(model => model.Bid)</b></li>
+    </ul>
+</div>
+@if (Model.Any())
+{
+    //foreach (var item in Model)
+    //{
+    <div class="child-column">
+        <ul class="child-row">
+                <li>@Html.DisplayFor(modelItem => Model.FirstOrDefault().UserName)</li>
+            <li></li>
+                <li>@Html.DisplayFor(modelItem => Model.FirstOrDefault().Bid)</li>
+        </ul>
+    </div>
+    //}
+}
 
-<p>
-    @*@Html.ActionLink("Create New", "Create", new { itemId = Model.Id })*@
-</p>
-
+@for (int i = 0; i <= 23; i++)
+{
+    <hr />
+}

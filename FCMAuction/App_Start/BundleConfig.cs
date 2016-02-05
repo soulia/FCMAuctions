@@ -12,7 +12,8 @@ namespace FCMAuction
                     "~/Scripts/jquery-{version}.js",
                     "~/Scripts/jquery-ui-{version}.js",
                     "~/Scripts/jquery.unobtrusive*",
-                    "~/Scripts/jquery.validate*"));
+                    "~/Scripts/jquery.validate*",
+                    "~/Scripts/foundation.*"));
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-{version}.js"));
 
@@ -42,7 +43,9 @@ namespace FCMAuction
                         "~/Content/themes/base/jquery.ui.tabs.css",
                         "~/Content/themes/base/jquery.ui.datepicker.css",
                         "~/Content/themes/base/jquery.ui.progressbar.css",
-                        "~/Content/themes/base/jquery.ui.theme.css"));
+                        "~/Content/themes/base/jquery.ui.theme.css",
+                        "~/Content/themes/base/foundation-flex.css",
+                        "~/Content/themes/base/foundation.css"));
         }
     }
 }

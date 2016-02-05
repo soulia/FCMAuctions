@@ -201,6 +201,7 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountModels.cs" />
+    <Compile Include="Models\BidListViewModel.cs" />
     <Compile Include="Models\FCMAuctionDb.cs" />
     <Compile Include="Models\Item.cs" />
     <Compile Include="Models\ItemBid.cs" />
@@ -216,6 +217,9 @@
     <Content Include="Content\images\IMG_1145.JPG" />
     <Content Include="Content\images\IMG_1155.JPG" />
     <Content Include="Content\PagedList.css" />
+    <Content Include="Content\themes\base\foundation-flex.css" />
+    <Content Include="Content\themes\base\foundation.css" />
+    <Content Include="Content\themes\base\minified\foundation.min.css" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
@@ -280,6 +284,8 @@
     <None Include="Properties\PublishProfiles\fcmauctions - Web Deploy %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\fcmauctions - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
+    <Content Include="Scripts\foundation.js" />
+    <Content Include="Scripts\foundation.min.js" />
     <Content Include="Scripts\jquery-1.8.2.js" />
     <Content Include="Scripts\jquery-1.8.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
@@ -341,8 +347,9 @@
     <Content Include="Views\Item\Edit.cshtml" />
     <Content Include="Views\Item\Delete.cshtml" />
     <Content Include="Views\Home\MyBids.cshtml" />
-    <None Include="Views\Item\Bid.cshtml.bak" />
     <Content Include="Views\Bids\Index.cshtml" />
+    <None Include="Views\Item\Bid.cshtml.bak" />
+    <Content Include="Views\Bids\_Index.cshtml" />
     <Content Include="Views\Bids\_Bids.cshtml" />
     <Content Include="Views\Bids\Create.cshtml" />
     <Content Include="Views\Item\Details.cshtml" />

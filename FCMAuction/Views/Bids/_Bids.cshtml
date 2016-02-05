@@ -1,4 +1,5 @@
-﻿@model IEnumerable<FCMAuction.Models.ItemBid>
+﻿@*@model IEnumerable<FCMAuction.Models.ItemBid>*@
+@model IEnumerable<BidListViewModel>
 
 <table>
     <tr>
@@ -12,14 +13,14 @@
     </tr>
     @if(Model.Any())
     { 
-    foreach (var item in Model)
+    foreach (var bid in Model)
     {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Bid)
+                @Html.DisplayFor(modelItem => bid.Bid)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ItemId)
+                @Html.DisplayFor(modelItem => bid.ItemId)
             </td>
             <td>
                 @*@Html.ActionLink("Edit", "Edit", new { id = item.Id })*@ 

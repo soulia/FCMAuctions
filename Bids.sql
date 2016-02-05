@@ -5,7 +5,9 @@ SELECT u.UserName, b.Id as BidId, i.Id as ItemId, i.Name, i.Description, b.Bid
     --where u.UserId = 3
   JOIN Items as i
 	ON b.ItemId = i.id
-	ORDER BY u.UserName
+	where UserName is not null
+	--ORDER BY u.UserName
+	order by i.Name, i.Description, b.Bid desc
 
 
 GO
@@ -24,8 +26,8 @@ group by UserId
 -- http://stackoverflow.com/questions/612231/how-can-i-select-rows-with-maxcolumn-value-distinct-by-another-column-in-sql
 -- http://stackoverflow.com/questions/5015279/how-to-get-the-sum-of-all-column-values-in-the-last-row-of-a-resultset
 -- http://stackoverflow.com/questions/1925176/sql-server-2008-top-10-and-distinct-together
--- winning bids
 
+-- winning bids
 select i.Name, w.ItemId, i.Description, i.Value, w.Bid, w.UserId, u.UserName from Items as i
 join
 (
@@ -39,19 +41,34 @@ group by ItemId
 ) AS groupedMaxBids
 on winners.ItemId = groupedMaxBids.ItemId
 and winners.Bid = groupedMaxBids.MaxBidId
---order by UserId, winners.ItemId 
 ) as w
 on i.Id = w.ItemId
 left outer join UserProfile as u
 on u.UserId = w.UserId
---order by UserId
 order by Name
+
+-- no bids
+select Name, Id as ItemId, Description from Items i
+where not exists 
+(
+	select * from ItemBids ib
+		where i.Id = ib.ItemId
+)
+order by Name
+
+
 
 --where w.UserId = 3
 order by w.UserId, w.ItemId 
 --order by w.ItemId asc
 
 
+
+
+select ItemId
+from ItemBids
+--where Bid = null
+group by ItemId
 
 
 
