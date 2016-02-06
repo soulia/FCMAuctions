@@ -87,10 +87,11 @@
                 </td>
                 <td>
                     @*@Html.ActionLink("Bid Me", "BidMe",  new { id = item.Id, bid = item.NewBid }) |*@
-                    @Html.ActionLink("Bid", "Create", "Bids", new { itemId = item.Id }, null) |
+                    @*@Html.ActionLink("Bid", "Create", "Bids", new { itemId = item.Id }, null) |*@
                     @Html.ActionLink("Details", "Details", "Item", new { id = item.Id }, null)
                     @if (User.IsInRole("admin"))
                     {
+                        <text> | @Html.ActionLink("Bid", "Create", "Bids", new { itemId = item.Id }, null)</text>
                         <text> | @Html.ActionLink("All Bids", "Index", "Bids", new { id = item.Id }, null)</text>
                         <text> | @Html.ActionLink("Edit", "Edit", "Item", new { id = item.Id }, null)</text>
                         <text> | @Html.ActionLink("Delete", "Delete", "Item", new { id = item.Id }, null)</text>

@@ -124,7 +124,7 @@ namespace FCMAuction.Controllers
 
         //
         // GET: /Item/Edit/5
-
+         [Authorize(Roles = "admin")]
         public ActionResult Edit(int id = 0)
         {
             Item item = _db.Items.Find(id);
@@ -137,6 +137,7 @@ namespace FCMAuction.Controllers
         // POST: /Item/Edit/5
 
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public ActionResult Edit(Item item)
         {
             if(ModelState.IsValid)

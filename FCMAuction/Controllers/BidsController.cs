@@ -145,6 +145,7 @@ namespace FCMAuction.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "admin")]
         public ActionResult Create(int itemId)
         {
             var allBids = from b in _db.ItemBids
@@ -170,6 +171,7 @@ namespace FCMAuction.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "admin")]
         // Obscure naming convention bug with EF - don't name parameters the same as model properties...
         // http://www.martin-brennan.com/net-mvc-4-model-binding-null-on-post/
         public ActionResult Create(ItemBid bidd)
