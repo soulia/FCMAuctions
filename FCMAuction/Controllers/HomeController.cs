@@ -19,12 +19,17 @@ namespace FCMAuction.Controllers
                             group b by b.ItemId into g
                             select new { ItemId = g.Key, Bid = g.Max(b => b.Bid) };
 
-            int bidsTotal =
-                            (from b in maxBids
-                             select b.Bid).Sum();
-            int bidsCount =
-                            (from b in _db.ItemBids
-                             select b.Bid).Count();
+            int bidsTotal = 0;
+            int bidsCount = 0;
+            if (maxBids.Any())
+            {
+                bidsTotal =
+                                (from b in maxBids
+                                 select b.Bid).Sum();
+                bidsCount =
+                                (from b in _db.ItemBids
+                                 select b.Bid).Count();
+            }
 
             ViewBag.BidTotal = string.Format("There are {0} bids and a total of {1:c0} in winning bids.", bidsCount, bidsTotal);
 
